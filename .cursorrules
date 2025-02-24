@@ -1,0 +1,26 @@
+{
+  "rules": {
+    "chat": {
+      "include": {
+        "backend": ["backend/**/*.py"],
+        "frontend": ["frontend/**/*.tsx", "frontend/**/*.ts"]
+      },
+      "exclude": [
+        "**/node_modules/**",
+        "**/__pycache__/**",
+        "**/venv/**",
+        "**/.venv/**"
+      ]
+    },
+    "contextProviders": {
+      "backend": {
+        "prompt": "Questo è un backend FastAPI che usa SQLAlchemy e Alembic per il database",
+        "include": ["backend/**/*.py"]
+      },
+      "frontend": {
+        "prompt": "Questo è un frontend React che usa Vite come bundler, TypeScript, e Chakra UI per i componenti",
+        "include": ["frontend/**/*.tsx", "frontend/**/*.ts"]
+      }
+    }
+  }
+}

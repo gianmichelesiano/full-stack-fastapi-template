@@ -3,6 +3,7 @@ import uuid
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
+from app.models.post import Post
 
 # Shared properties
 class UserBase(SQLModel):
@@ -10,6 +11,7 @@ class UserBase(SQLModel):
     is_active: bool = True
     is_superuser: bool = False
     full_name: str | None = Field(default=None, max_length=255)
+
 
 
 # Properties to receive via API on creation
@@ -41,9 +43,11 @@ class UpdatePassword(SQLModel):
 
 # Database model, database table inferred from class name
 class User(UserBase, table=True):
+    __tablename__ = "user"  # Add this line to explicitly set the table name
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    posts: list["Post"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required

@@ -1,0 +1,3 @@
+
+origin  https://github.com/fastapi/full-stack-fastapi-template.git (fetch)
+origin  https://github.com/fastapi/full-stack-fastapi-template.git (push)

@@ -1,0 +1,5 @@
+npm run dev
+
+update client in fronted
+curl.exe http://localhost:8000/api/v1/openapi.json > openapi.json
+npm run generate-client

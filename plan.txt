@@ -1,0 +1,77 @@
+Componenti Principali:
+
+Stack Tecnologico:
+
+
+Backend: FastAPI + SQLModel + PostgreSQL
+Frontend: React + TypeScript + Chakra UI
+Testing: Playwright + Pytest
+Infrastruttura: Docker + Traefik
+Autenticazione: JWT + Email recovery
+
+
+Funzionalità Core:
+
+
+Gestione profili aziendali (singoli e ATI)
+Upload e analisi documenti
+Generazione documentazione per gare
+Validazione requisiti
+Sistema di notifiche
+
+Piano di Implementazione:
+
+FASE INIZIALE - Setup Progetto (1 settimana)
+
+
+ Setup repository Git con struttura base
+ Configurazione Docker con docker-compose.yml
+ Setup ambiente FastAPI con SQLModel
+ Setup progetto React con Vite e TypeScript
+ Configurazione Traefik come reverse proxy
+ Setup iniziale PostgreSQL
+ Configurazione CI/CD con GitHub Actions
+
+
+FASE AUTENTICAZIONE (1 settimana)
+
+
+ Implementazione JWT backend
+ Sistema di recupero password via email
+ Modelli utente e profilo base
+ Frontend login/registrazione
+ Gestione token lato client
+ Testing autenticazione
+
+
+FASE GESTIONE AZIENDE (2 settimane)
+
+
+ Database schema per profili aziendali
+ API CRUD per gestione dati azienda
+ Gestione ATI (Associazioni Temporanee)
+ Frontend form profilo aziendale
+ Interfaccia gestione ATI
+ Testing integrazione dati aziendali
+
+
+FASE GESTIONE DOCUMENTI (2 settimane)
+
+
+ Sistema upload documenti
+ Integrazione OCR per estrazione testo
+ Categorizzazione automatica documenti
+ Frontend upload e preview documenti
+ Sistema archiviazione documenti
+ Testing gestione documenti
+
+
+FASE GENERAZIONE DOCUMENTI (2 settimane)
+
+
+ Template system per documenti di gara
+ Logica validazione requisiti
+ Generazione automatica ESPPD
+ Frontend compilazione template
+ Sistema export documenti
+ Testing generazione documenti
