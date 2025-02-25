@@ -42,6 +42,15 @@ def read_posts(
     return PostsPublic(data=posts, count=count)
 
 
+@router.get("/hello-world", response_model=Message)
+def hello_world(session: SessionDep) -> Message:
+    """
+    Simple hello world endpoint for testing.
+    This endpoint does not require authentication but uses a database session.
+    """
+    return Message(message="Hello World11!")
+
+
 @router.get("/{id}", response_model=PostPublic)
 def read_post(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
     """
