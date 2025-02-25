@@ -1,3 +1,26 @@
 
 origin  https://github.com/fastapi/full-stack-fastapi-template.git (fetch)
 origin  https://github.com/fastapi/full-stack-fastapi-template.git (push)
+
+#mio
+git push -u origin master
+
+
+git remote -v
+git remote add upstream https://github.com/fastapi/full-stack-fastapi-template.git
+
+
+git fetch upstream
+git merge upstream/master
+
+git branch -a
+git merge upstream/master
+
+
+to run in renote server
+traefik 
+docker-compose -f docker-compose.traefik.yml --env-file .env.traefik down
+docker-compose -f docker-compose.traefik.yml --env-file .env.traefik up -d
+
+docker-compose -f docker-compose.yml down
+docker-compose -f docker-compose.yml up -d
