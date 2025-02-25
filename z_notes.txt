@@ -1,3 +1,11 @@
 
 origin  https://github.com/fastapi/full-stack-fastapi-template.git (fetch)
 origin  https://github.com/fastapi/full-stack-fastapi-template.git (push)
+
+azioni da fare nel update seerver remote
+
+docker-compose down
+docker-compose build
+
+# Riavvia i container
+docker-compose up -d
