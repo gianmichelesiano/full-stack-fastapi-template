@@ -33,6 +33,8 @@ COPY ./pyproject.toml ./uv.lock ./alembic.ini /app/
 
 COPY ./app /app/app
 
+COPY ./pittogrammi.json /app/
+
 # Sync the project
 # Temporarily modified to work without BuildKit
 RUN uv sync
