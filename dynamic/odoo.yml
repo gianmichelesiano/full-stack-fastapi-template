@@ -1,0 +1,30 @@
+http:
+  routers:
+    odoo-router:
+      rule: "Host(`speats.ch`)"
+      service: odoo-service
+      entryPoints:
+        - https
+      tls:
+        certResolver: le
+
+    # Router per reindirizzare HTTP a HTTPS
+    odoo-router-http:
+      rule: "Host(`speats.ch`)"
+      entryPoints:
+        - http
+      middlewares:
+        - https-redirect
+      service: odoo-service
+  
+  services:
+    odoo-service:
+      loadBalancer:
+        servers:
+          - url: "http://172.232.218.152:8069"
+  
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
