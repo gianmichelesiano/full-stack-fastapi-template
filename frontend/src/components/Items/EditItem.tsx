@@ -1,20 +1,15 @@
-import {
-  Button,
-  ButtonGroup,
-  DialogActionTrigger,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FaExchangeAlt } from "react-icons/fa"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { type ApiError, type ItemPublic, ItemsService } from "@/client"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
@@ -75,10 +70,8 @@ const EditItem = ({ item }: EditItemProps) => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
         <Button variant="ghost">
@@ -92,8 +85,8 @@ const EditItem = ({ item }: EditItemProps) => {
             <DialogTitle>Edit Item</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the item details below.</Text>
-            <VStack gap={4}>
+            <p className="mb-4">Update the item details below.</p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.title}
@@ -122,24 +115,23 @@ const EditItem = ({ item }: EditItemProps) => {
                   type="text"
                 />
               </Field>
-            </VStack>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
-            <ButtonGroup>
+          <DialogFooter className="space-x-2">
+            <div className="flex space-x-2">
               <DialogActionTrigger asChild>
                 <Button
-                  variant="subtle"
-                  colorPalette="gray"
+                  variant="outline"
                   disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
               </DialogActionTrigger>
-              <Button variant="solid" type="submit" loading={isSubmitting}>
+              <Button variant="default" type="submit" loading={isSubmitting}>
                 Save
               </Button>
-            </ButtonGroup>
+            </div>
           </DialogFooter>
         </form>
         <DialogCloseTrigger />

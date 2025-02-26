@@ -1,4 +1,3 @@
-import { Container, Flex, Image, Input, Text } from "@chakra-ui/react"
 import {
   Link as RouterLink,
   createFileRoute,
@@ -10,6 +9,7 @@ import { FiLock, FiUser } from "react-icons/fi"
 import type { UserRegister } from "@/client"
 import { Button } from "@/components/ui/button"
 import { Field } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import { InputGroup } from "@/components/ui/input-group"
 import { PasswordInput } from "@/components/ui/password-input"
 import useAuth, { isLoggedIn } from "@/hooks/useAuth"
@@ -55,30 +55,21 @@ function SignUp() {
 
   return (
     <>
-      <Flex flexDir={{ base: "column", md: "row" }} justify="center" h="100vh">
-        <Container
-          as="form"
+      <div className="flex flex-col md:flex-row justify-center h-screen">
+        <form
+          className="flex flex-col items-stretch justify-center h-screen max-w-sm mx-auto gap-4"
           onSubmit={handleSubmit(onSubmit)}
-          h="100vh"
-          maxW="sm"
-          alignItems="stretch"
-          justifyContent="center"
-          gap={4}
-          centerContent
         >
-          <Image
+          <img
             src={Logo}
             alt="FastAPI logo"
-            height="auto"
-            maxW="2xs"
-            alignSelf="center"
-            mb={4}
+            className="h-auto max-w-[16rem] self-center mb-4"
           />
           <Field
             invalid={!!errors.full_name}
             errorText={errors.full_name?.message}
           >
-            <InputGroup w="100%" startElement={<FiUser />}>
+            <InputGroup className="w-full" startElement={<FiUser />}>
               <Input
                 id="full_name"
                 minLength={3}
@@ -92,7 +83,7 @@ function SignUp() {
           </Field>
 
           <Field invalid={!!errors.email} errorText={errors.email?.message}>
-            <InputGroup w="100%" startElement={<FiUser />}>
+            <InputGroup className="w-full" startElement={<FiUser />}>
               <Input
                 id="email"
                 {...register("email", {
@@ -118,17 +109,17 @@ function SignUp() {
             placeholder="Confirm Password"
             errors={errors}
           />
-          <Button variant="solid" type="submit" loading={isSubmitting}>
+          <Button variant="default" type="submit" loading={isSubmitting}>
             Sign Up
           </Button>
-          <Text>
+          <p className="text-sm">
             Already have an account?{" "}
             <RouterLink to="/login" className="main-link">
               Log In
             </RouterLink>
-          </Text>
-        </Container>
-      </Flex>
+          </p>
+        </form>
+      </div>
     </>
   )
 }

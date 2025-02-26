@@ -1,47 +1,66 @@
-import type {
-  SkeletonProps as ChakraSkeletonProps,
-  CircleProps,
-} from "@chakra-ui/react"
-import { Skeleton as ChakraSkeleton, Circle, Stack } from "@chakra-ui/react"
 import * as React from "react"
+import { cn } from "../../utils"
 
-export interface SkeletonCircleProps extends ChakraSkeletonProps {
-  size?: CircleProps["size"]
+function Skeleton({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn("animate-pulse rounded-md bg-muted", className)}
+      {...props}
+    />
+  )
+}
+
+export interface SkeletonCircleProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: string | number
 }
 
 export const SkeletonCircle = React.forwardRef<
   HTMLDivElement,
   SkeletonCircleProps
->(function SkeletonCircle(props, ref) {
-  const { size, ...rest } = props
+>(function SkeletonCircle({ size = "2.5rem", className, ...props }, ref) {
   return (
-    <Circle size={size} asChild ref={ref}>
-      <ChakraSkeleton {...rest} />
-    </Circle>
+    <div
+      className={cn("animate-pulse rounded-full bg-muted", className)}
+      style={{
+        width: size,
+        height: size,
+      }}
+      ref={ref}
+      {...props}
+    />
   )
 })
+SkeletonCircle.displayName = "SkeletonCircle"
 
-export interface SkeletonTextProps extends ChakraSkeletonProps {
+export interface SkeletonTextProps extends React.HTMLAttributes<HTMLDivElement> {
   noOfLines?: number
+  gap?: string | number
 }
 
 export const SkeletonText = React.forwardRef<HTMLDivElement, SkeletonTextProps>(
-  function SkeletonText(props, ref) {
-    const { noOfLines = 3, gap, ...rest } = props
+  function SkeletonText({ noOfLines = 3, gap = "0.5rem", className, ...props }, ref) {
     return (
-      <Stack gap={gap} width="full" ref={ref}>
+      <div
+        className={cn("w-full", className)}
+        style={{ gap }}
+        ref={ref}
+        {...props}
+      >
         {Array.from({ length: noOfLines }).map((_, index) => (
-          <ChakraSkeleton
-            height="4"
+          <Skeleton
             key={index}
-            {...props}
-            _last={{ maxW: "80%" }}
-            {...rest}
+            className={cn("h-4", {
+              "max-w-[80%]": index === noOfLines - 1,
+            })}
           />
         ))}
-      </Stack>
+      </div>
     )
-  },
+  }
 )
+SkeletonText.displayName = "SkeletonText"
 
-export const Skeleton = ChakraSkeleton
+export { Skeleton }

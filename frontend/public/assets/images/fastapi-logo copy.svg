@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200">
+  <!-- Sfondo a scacchi -->
+  <pattern id="checkerPattern" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+    <rect width="10" height="10" fill="#2a2a2a"/>
+    <rect x="10" y="0" width="10" height="10" fill="#222"/>
+    <rect x="0" y="10" width="10" height="10" fill="#222"/>
+    <rect x="10" y="10" width="10" height="10" fill="#2a2a2a"/>
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#checkerPattern)"/>
+  
+  <!-- Cerchio nero con fulmine bianco -->
+        <circle
+           style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.141404;stop-color:#000000"
+           id="path875-5-9-7-3-2-3-9-9-8-0-0-5-87-7"
+           cx="964.56165"
+           cy="-169.22266"
+           r="33.234192" />
+        <path
+           id="rect1249-6-3-4-4-3-6-6-1-2"
+           style="fill:#ffffff;fill-opacity:0.980392;stroke:none;stroke-width:0.146895;stop-color:#000000"
+           d="m 962.2685,-187.40837 -6.64403,14.80375 -3.03599,6.76393 -6.64456,14.80375 30.59142,-21.56768 h -14.35312 l 20.99715,-14.80375 z" />
+  
+  <!-- Testo BandiGare -->
+  <text x="210" y="140" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="black">BandiGare</text>
+</svg>

@@ -1,4 +1,3 @@
-import { Container, Heading, Input, Text } from "@chakra-ui/react"
 import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -7,6 +6,7 @@ import { FiMail } from "react-icons/fi"
 import { type ApiError, LoginService } from "@/client"
 import { Button } from "@/components/ui/button"
 import { Field } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import { InputGroup } from "@/components/ui/input-group"
 import { isLoggedIn } from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
@@ -58,24 +58,18 @@ function RecoverPassword() {
   }
 
   return (
-    <Container
-      as="form"
+    <form
+      className="flex flex-col items-stretch justify-center h-screen max-w-sm mx-auto gap-4"
       onSubmit={handleSubmit(onSubmit)}
-      h="100vh"
-      maxW="sm"
-      alignItems="stretch"
-      justifyContent="center"
-      gap={4}
-      centerContent
     >
-      <Heading size="xl" color="ui.main" textAlign="center" mb={2}>
+      <h1 className="text-2xl font-bold text-center mb-2 text-primary">
         Password Recovery
-      </Heading>
-      <Text textAlign="center">
+      </h1>
+      <p className="text-center">
         A password recovery email will be sent to the registered account.
-      </Text>
+      </p>
       <Field invalid={!!errors.email} errorText={errors.email?.message}>
-        <InputGroup w="100%" startElement={<FiMail />}>
+        <InputGroup className="w-full" startElement={<FiMail />}>
           <Input
             id="email"
             {...register("email", {
@@ -87,9 +81,9 @@ function RecoverPassword() {
           />
         </InputGroup>
       </Field>
-      <Button variant="solid" type="submit" loading={isSubmitting}>
+      <Button variant="default" type="submit" loading={isSubmitting}>
         Continue
       </Button>
-    </Container>
+    </form>
   )
 }

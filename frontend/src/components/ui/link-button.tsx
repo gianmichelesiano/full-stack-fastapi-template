@@ -1,12 +1,25 @@
 "use client"
 
-import type { HTMLChakraProps, RecipeProps } from "@chakra-ui/react"
-import { createRecipeContext } from "@chakra-ui/react"
+import * as React from "react"
+import { type VariantProps } from "class-variance-authority"
+import { buttonVariants } from "./button"
+import { cn } from "../../utils"
 
 export interface LinkButtonProps
-  extends HTMLChakraProps<"a", RecipeProps<"button">> {}
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof buttonVariants> {}
 
-const { withContext } = createRecipeContext({ key: "button" })
+const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <a
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+LinkButton.displayName = "LinkButton"
 
-// Replace "a" with your framework's link component
-export const LinkButton = withContext<HTMLAnchorElement, LinkButtonProps>("a")
+export { LinkButton }

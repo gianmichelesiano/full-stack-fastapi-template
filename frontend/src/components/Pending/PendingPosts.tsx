@@ -1,35 +1,43 @@
-import { Skeleton, Table } from "@chakra-ui/react"
+import { SkeletonText } from "../ui/skeleton"
+import {
+  TableBody,
+  TableCell,
+  TableColumnHeader,
+  TableHeader,
+  TableRoot,
+  TableRow,
+} from "../ui/table"
 
 const PendingPosts = () => {
   return (
-    <Table.Root>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader w="20%">ID</Table.ColumnHeader>
-          <Table.ColumnHeader w="30%">Title</Table.ColumnHeader>
-          <Table.ColumnHeader w="40%">Content</Table.ColumnHeader>
-          <Table.ColumnHeader w="10%">Actions</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
+    <TableRoot size="md">
+      <TableHeader>
+        <TableRow>
+          <TableColumnHeader w="20%">ID</TableColumnHeader>
+          <TableColumnHeader w="30%">Title</TableColumnHeader>
+          <TableColumnHeader w="40%">Content</TableColumnHeader>
+          <TableColumnHeader w="10%">Actions</TableColumnHeader>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {Array.from({ length: 5 }).map((_, i) => (
-          <Table.Row key={i}>
-            <Table.Cell>
-              <Skeleton h="20px" w="100%" />
-            </Table.Cell>
-            <Table.Cell>
-              <Skeleton h="20px" w="100%" />
-            </Table.Cell>
-            <Table.Cell>
-              <Skeleton h="20px" w="100%" />
-            </Table.Cell>
-            <Table.Cell>
-              <Skeleton h="20px" w="100%" />
-            </Table.Cell>
-          </Table.Row>
+          <TableRow key={i}>
+            <TableCell>
+              <SkeletonText noOfLines={1} />
+            </TableCell>
+            <TableCell>
+              <SkeletonText noOfLines={1} />
+            </TableCell>
+            <TableCell>
+              <SkeletonText noOfLines={1} />
+            </TableCell>
+            <TableCell>
+              <SkeletonText noOfLines={1} />
+            </TableCell>
+          </TableRow>
         ))}
-      </Table.Body>
-    </Table.Root>
+      </TableBody>
+    </TableRoot>
   )
 }
 

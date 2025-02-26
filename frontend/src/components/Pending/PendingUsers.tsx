@@ -1,39 +1,46 @@
-import { Table } from "@chakra-ui/react"
 import { SkeletonText } from "../ui/skeleton"
+import {
+  TableBody,
+  TableCell,
+  TableColumnHeader,
+  TableHeader,
+  TableRoot,
+  TableRow,
+} from "../ui/table"
 
 const PendingUsers = () => (
-  <Table.Root size={{ base: "sm", md: "md" }}>
-    <Table.Header>
-      <Table.Row>
-        <Table.ColumnHeader w="sm">Full name</Table.ColumnHeader>
-        <Table.ColumnHeader w="sm">Email</Table.ColumnHeader>
-        <Table.ColumnHeader w="sm">Role</Table.ColumnHeader>
-        <Table.ColumnHeader w="sm">Status</Table.ColumnHeader>
-        <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
+  <TableRoot size="md">
+    <TableHeader>
+      <TableRow>
+        <TableColumnHeader w="sm">Full name</TableColumnHeader>
+        <TableColumnHeader w="sm">Email</TableColumnHeader>
+        <TableColumnHeader w="sm">Role</TableColumnHeader>
+        <TableColumnHeader w="sm">Status</TableColumnHeader>
+        <TableColumnHeader w="sm">Actions</TableColumnHeader>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
       {[...Array(5)].map((_, index) => (
-        <Table.Row key={index}>
-          <Table.Cell>
+        <TableRow key={index}>
+          <TableCell>
             <SkeletonText noOfLines={1} />
-          </Table.Cell>
-          <Table.Cell>
+          </TableCell>
+          <TableCell>
             <SkeletonText noOfLines={1} />
-          </Table.Cell>
-          <Table.Cell>
+          </TableCell>
+          <TableCell>
             <SkeletonText noOfLines={1} />
-          </Table.Cell>
-          <Table.Cell>
+          </TableCell>
+          <TableCell>
             <SkeletonText noOfLines={1} />
-          </Table.Cell>
-          <Table.Cell>
+          </TableCell>
+          <TableCell>
             <SkeletonText noOfLines={1} />
-          </Table.Cell>
-        </Table.Row>
+          </TableCell>
+        </TableRow>
       ))}
-    </Table.Body>
-  </Table.Root>
+    </TableBody>
+  </TableRoot>
 )
 
 export default PendingUsers

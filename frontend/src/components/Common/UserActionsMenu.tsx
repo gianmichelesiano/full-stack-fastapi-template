@@ -1,5 +1,5 @@
-import { IconButton } from "@chakra-ui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
+import { Button } from "../ui/button"
 import { MenuContent, MenuRoot, MenuTrigger } from "../ui/menu"
 
 import type { UserPublic } from "@/client"
@@ -15,9 +15,14 @@ export const UserActionsMenu = ({ user, disabled }: UserActionsMenuProps) => {
   return (
     <MenuRoot>
       <MenuTrigger asChild>
-        <IconButton variant="ghost" color="inherit" disabled={disabled}>
-          <BsThreeDotsVertical />
-        </IconButton>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="h-8 w-8" 
+          disabled={disabled}
+        >
+          <BsThreeDotsVertical className="h-4 w-4" />
+        </Button>
       </MenuTrigger>
       <MenuContent>
         <EditUser user={user} />

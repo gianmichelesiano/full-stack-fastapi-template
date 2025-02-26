@@ -1,29 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
+import { useState } from "react"
+import { FaPlus } from "react-icons/fa"
 
 import { type UserCreate, UsersService } from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, handleError } from "@/utils"
-import {
-  Button,
-  DialogActionTrigger,
-  DialogTitle,
-  Flex,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
-import { useState } from "react"
-import { FaPlus } from "react-icons/fa"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Checkbox } from "../ui/checkbox"
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogRoot,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
@@ -78,13 +73,11 @@ const AddUser = () => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
-        <Button value="add-user" my={4}>
+        <Button value="add-user" className="my-4">
           <FaPlus fontSize="16px" />
           Add User
         </Button>
@@ -95,10 +88,10 @@ const AddUser = () => {
             <DialogTitle>Add User</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>
+            <p className="mb-4">
               Fill in the form below to add a new user to the system.
-            </Text>
-            <VStack gap={4}>
+            </p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.email}
@@ -167,17 +160,17 @@ const AddUser = () => {
                   type="password"
                 />
               </Field>
-            </VStack>
+            </div>
 
-            <Flex mt={4} direction="column" gap={4}>
+            <div className="mt-4 flex flex-col space-y-4">
               <Controller
                 control={control}
                 name="is_superuser"
                 render={({ field }) => (
-                  <Field disabled={field.disabled} colorPalette="teal">
+                  <Field>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={({ checked }) => field.onChange(checked)}
+                      checked={field.value === true}
+                      onCheckedChange={(checked) => field.onChange(checked)}
                     >
                       Is superuser?
                     </Checkbox>
@@ -188,31 +181,30 @@ const AddUser = () => {
                 control={control}
                 name="is_active"
                 render={({ field }) => (
-                  <Field disabled={field.disabled} colorPalette="teal">
+                  <Field>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={({ checked }) => field.onChange(checked)}
+                      checked={field.value === true}
+                      onCheckedChange={(checked) => field.onChange(checked)}
                     >
                       Is active?
                     </Checkbox>
                   </Field>
                 )}
               />
-            </Flex>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
+          <DialogFooter className="space-x-2">
             <DialogActionTrigger asChild>
               <Button
-                variant="subtle"
-                colorPalette="gray"
+                variant="outline"
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
             </DialogActionTrigger>
             <Button
-              variant="solid"
+              variant="default"
               type="submit"
               disabled={!isValid}
               loading={isSubmitting}

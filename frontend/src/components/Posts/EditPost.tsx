@@ -1,21 +1,15 @@
-import {
-  Button,
-  ButtonGroup,
-  DialogActionTrigger,
-  Input,
-  Text,
-  Textarea,
-  VStack,
-} from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FaExchangeAlt } from "react-icons/fa"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { type ApiError, type PostPublic, PostsService } from "@/client"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
@@ -75,10 +69,8 @@ const EditPost = ({ post }: EditPostProps) => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
         <Button variant="ghost">
@@ -92,8 +84,8 @@ const EditPost = ({ post }: EditPostProps) => {
             <DialogTitle>Edit Post</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the post details below.</Text>
-            <VStack gap={4}>
+            <p className="mb-4">Update the post details below.</p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.title}
@@ -115,8 +107,9 @@ const EditPost = ({ post }: EditPostProps) => {
                 errorText={errors.description?.message}
                 label="Description"
               >
-                <Textarea
+                <textarea
                   id="description"
+                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   {...register("description", {
                     required: "Description is required",
                   })}
@@ -124,24 +117,23 @@ const EditPost = ({ post }: EditPostProps) => {
                   rows={4}
                 />
               </Field>
-            </VStack>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
-            <ButtonGroup>
+          <DialogFooter className="space-x-2">
+            <div className="flex space-x-2">
               <DialogActionTrigger asChild>
                 <Button
-                  variant="subtle"
-                  colorPalette="gray"
+                  variant="outline"
                   disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
               </DialogActionTrigger>
-              <Button variant="solid" type="submit" loading={isSubmitting}>
+              <Button variant="default" type="submit" loading={isSubmitting}>
                 Save
               </Button>
-            </ButtonGroup>
+            </div>
           </DialogFooter>
         </form>
         <DialogCloseTrigger />

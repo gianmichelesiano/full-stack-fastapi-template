@@ -1,53 +1,41 @@
-import type { BoxProps, InputElementProps } from "@chakra-ui/react"
-import { Group, InputElement } from "@chakra-ui/react"
 import * as React from "react"
+import { cn } from "../../utils"
 
-export interface InputGroupProps extends BoxProps {
-  startElementProps?: InputElementProps
-  endElementProps?: InputElementProps
+export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   startElement?: React.ReactNode
   endElement?: React.ReactNode
-  children: React.ReactElement<InputElementProps>
-  startOffset?: InputElementProps["paddingStart"]
-  endOffset?: InputElementProps["paddingEnd"]
+  children: React.ReactElement
 }
 
 export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
-  function InputGroup(props, ref) {
-    const {
-      startElement,
-      startElementProps,
-      endElement,
-      endElementProps,
-      children,
-      startOffset = "6px",
-      endOffset = "6px",
-      ...rest
-    } = props
-
-    const child =
-      React.Children.only<React.ReactElement<InputElementProps>>(children)
+  function InputGroup({ className, startElement, endElement, children, ...props }, ref) {
+    const child = React.Children.only(children) as React.ReactElement<{ className?: string }>
 
     return (
-      <Group ref={ref} {...rest}>
+      <div 
+        className={cn("relative flex items-center", className)} 
+        ref={ref} 
+        {...props}
+      >
         {startElement && (
-          <InputElement pointerEvents="none" {...startElementProps}>
+          <div className="absolute left-3 flex h-full items-center pointer-events-none">
             {startElement}
-          </InputElement>
+          </div>
         )}
         {React.cloneElement(child, {
-          ...(startElement && {
-            ps: `calc(var(--input-height) - ${startOffset})`,
-          }),
-          ...(endElement && { pe: `calc(var(--input-height) - ${endOffset})` }),
-          ...children.props,
+          className: cn(
+            child.props.className,
+            startElement && "pl-10",
+            endElement && "pr-10"
+          ),
         })}
         {endElement && (
-          <InputElement placement="end" {...endElementProps}>
+          <div className="absolute right-3 flex h-full items-center pointer-events-none">
             {endElement}
-          </InputElement>
+          </div>
         )}
-      </Group>
+      </div>
     )
-  },
+  }
 )
+InputGroup.displayName = "InputGroup"

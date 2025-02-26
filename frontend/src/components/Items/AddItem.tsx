@@ -1,28 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
-
-import {
-  Button,
-  DialogActionTrigger,
-  DialogTitle,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { type ItemCreate, ItemsService } from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogRoot,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
@@ -67,13 +62,11 @@ const AddItem = () => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
-        <Button value="add-item" my={4}>
+        <Button value="add-item" className="my-4">
           <FaPlus fontSize="16px" />
           Add Item
         </Button>
@@ -84,8 +77,8 @@ const AddItem = () => {
             <DialogTitle>Add Item</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Fill in the details to add a new item.</Text>
-            <VStack gap={4}>
+            <p className="mb-4">Fill in the details to add a new item.</p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.title}
@@ -114,21 +107,20 @@ const AddItem = () => {
                   type="text"
                 />
               </Field>
-            </VStack>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
+          <DialogFooter className="space-x-2">
             <DialogActionTrigger asChild>
               <Button
-                variant="subtle"
-                colorPalette="gray"
+                variant="outline"
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
             </DialogActionTrigger>
             <Button
-              variant="solid"
+              variant="default"
               type="submit"
               disabled={!isValid}
               loading={isSubmitting}

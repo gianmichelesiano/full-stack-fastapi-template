@@ -1,31 +1,40 @@
-import { Flex, Image, useBreakpointValue } from "@chakra-ui/react"
 import { Link } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
 
 import Logo from "/assets/images/fastapi-logo.svg"
 import UserMenu from "./UserMenu"
 
 function Navbar() {
-  const display = useBreakpointValue({ base: "none", md: "flex" })
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Initial check
+    checkScreenSize()
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize)
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
+
+  if (isMobile) {
+    return null
+  }
 
   return (
-    <Flex
-      display={display}
-      justify="space-between"
-      position="sticky"
-      color="white"
-      align="center"
-      bg="bg.muted"
-      w="100%"
-      top={0}
-      p={4}
-    >
+    <div className="flex justify-between sticky top-0 items-center bg-muted/50 w-full p-4 text-white">
       <Link to="/">
-        <Image src={Logo} alt="Logo" maxW="3xs" p={2} />
+        <img src={Logo} alt="Logo" className="max-w-[200px] p-2" />
       </Link>
-      <Flex gap={2} alignItems="center">
+      <div className="flex gap-2 items-center">
         <UserMenu />
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   )
 }
 

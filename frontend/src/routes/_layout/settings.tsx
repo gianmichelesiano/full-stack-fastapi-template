@@ -1,4 +1,4 @@
-import { Container, Heading, Tabs } from "@chakra-ui/react"
+import * as Tabs from "@radix-ui/react-tabs"
 import { createFileRoute } from "@tanstack/react-router"
 
 import Appearance from "@/components/UserSettings/Appearance"
@@ -29,12 +29,12 @@ function UserSettings() {
   }
 
   return (
-    <Container maxW="full">
-      <Heading size="lg" textAlign={{ base: "center", md: "left" }} py={12}>
+    <div className="w-full">
+      <h1 className="text-xl font-bold text-center md:text-left py-12">
         User Settings
-      </Heading>
+      </h1>
 
-      <Tabs.Root defaultValue="my-profile" variant="subtle">
+      <Tabs.Root defaultValue="my-profile" className="w-full">
         <Tabs.List>
           {finalTabs.map((tab) => (
             <Tabs.Trigger key={tab.value} value={tab.value}>
@@ -48,6 +48,6 @@ function UserSettings() {
           </Tabs.Content>
         ))}
       </Tabs.Root>
-    </Container>
+    </div>
   )
 }

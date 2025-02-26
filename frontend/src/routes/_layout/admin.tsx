@@ -1,4 +1,3 @@
-import { Badge, Container, Flex, Heading, Table } from "@chakra-ui/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
@@ -12,11 +11,15 @@ import {
   PaginationNextTrigger,
   PaginationPrevTrigger,
   PaginationRoot,
-} from "@/components/ui/pagination.tsx"
-
-const usersSearchSchema = z.object({
-  page: z.number().catch(1),
-})
+} from "@/components/ui/pagination"
+import {
+  TableBody,
+  TableCell,
+  TableColumnHeader,
+  TableHeader,
+  TableRoot,
+  TableRow,
+} from "@/components/ui/table"
 
 const PER_PAGE = 5
 
@@ -28,26 +31,42 @@ function getUsersQueryOptions({ page }: { page: number }) {
   }
 }
 
+// Define a schema for validation
+const searchSchema = z.object({
+  page: z.coerce.number().default(1),
+})
+
 export const Route = createFileRoute("/_layout/admin")({
   component: Admin,
-  validateSearch: (search) => usersSearchSchema.parse(search),
+  validateSearch: (search) => searchSchema.parse(search),
 })
 
 function UsersTable() {
   const queryClient = useQueryClient()
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"])
   const navigate = useNavigate({ from: Route.fullPath })
-  const { page } = Route.useSearch()
-
+  
+  // Get raw search params and parse them
+  const rawSearch = Route.useSearch()
+  // Default to page 1 if not present
+  const currentPage = rawSearch && typeof rawSearch === 'object' && 'page' in rawSearch 
+    ? Number(rawSearch.page) 
+    : 1
+  
   const { data, isLoading, isPlaceholderData } = useQuery({
-    ...getUsersQueryOptions({ page }),
+    ...getUsersQueryOptions({ page: currentPage }),
     placeholderData: (prevData) => prevData,
   })
 
-  const setPage = (page: number) =>
+  // Navigate with the updated page
+  const setPage = (newPage: number) => {
+    // Use a different approach for navigation
     navigate({
-      search: (prev: { [key: string]: string }) => ({ ...prev, page }),
+      to: "/_layout/admin",
+      search: () => ({ page: String(newPage) }),
+      replace: true
     })
+  }
 
   const users = data?.data.slice(0, PER_PAGE) ?? []
   const count = data?.count ?? 0
@@ -58,70 +77,72 @@ function UsersTable() {
 
   return (
     <>
-      <Table.Root size={{ base: "sm", md: "md" }}>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader w="sm">Full name</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Email</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Role</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Status</Table.ColumnHeader>
-            <Table.ColumnHeader w="sm">Actions</Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
+      <TableRoot size="md">
+        <TableHeader>
+          <TableRow>
+            <TableColumnHeader w="sm">Full name</TableColumnHeader>
+            <TableColumnHeader w="sm">Email</TableColumnHeader>
+            <TableColumnHeader w="sm">Role</TableColumnHeader>
+            <TableColumnHeader w="sm">Status</TableColumnHeader>
+            <TableColumnHeader w="sm">Actions</TableColumnHeader>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {users?.map((user) => (
-            <Table.Row key={user.id} opacity={isPlaceholderData ? 0.5 : 1}>
-              <Table.Cell color={!user.full_name ? "gray" : "inherit"}>
+            <TableRow key={user.id} className={isPlaceholderData ? "opacity-50" : ""}>
+              <TableCell className={!user.full_name ? "text-muted-foreground" : ""}>
                 {user.full_name || "N/A"}
                 {currentUser?.id === user.id && (
-                  <Badge ml="1" colorScheme="teal">
+                  <span className="ml-1 text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
                     You
-                  </Badge>
+                  </span>
                 )}
-              </Table.Cell>
-              <Table.Cell truncate maxW="sm">
+              </TableCell>
+              <TableCell truncate maxW="sm">
                 {user.email}
-              </Table.Cell>
-              <Table.Cell>
+              </TableCell>
+              <TableCell>
                 {user.is_superuser ? "Superuser" : "User"}
-              </Table.Cell>
-              <Table.Cell>{user.is_active ? "Active" : "Inactive"}</Table.Cell>
-              <Table.Cell>
+              </TableCell>
+              <TableCell>{user.is_active ? "Active" : "Inactive"}</TableCell>
+              <TableCell>
                 <UserActionsMenu
                   user={user}
                   disabled={currentUser?.id === user.id}
                 />
-              </Table.Cell>
-            </Table.Row>
+              </TableCell>
+            </TableRow>
           ))}
-        </Table.Body>
-      </Table.Root>
-      <Flex justifyContent="flex-end" mt={4}>
+        </TableBody>
+      </TableRoot>
+      <div className="flex justify-end mt-4">
         <PaginationRoot
           count={count}
           pageSize={PER_PAGE}
-          onPageChange={({ page }) => setPage(page)}
+          onChange={(page) => setPage(page)}
         >
-          <Flex>
+          <div className="flex">
             <PaginationPrevTrigger />
             <PaginationItems />
             <PaginationNextTrigger />
-          </Flex>
+          </div>
         </PaginationRoot>
-      </Flex>
+      </div>
     </>
   )
 }
 
 function Admin() {
   return (
-    <Container maxW="full">
-      <Heading size="lg" pt={12}>
+    <div className="container max-w-full">
+      <h1 className="text-2xl font-bold pt-12">
         Users Management
-      </Heading>
+      </h1>
 
       <AddUser />
       <UsersTable />
-    </Container>
+    </div>
   )
 }
+
+export default Admin

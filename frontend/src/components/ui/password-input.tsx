@@ -1,24 +1,12 @@
 "use client"
 
-import type {
-  ButtonProps,
-  GroupProps,
-  InputProps,
-  StackProps,
-} from "@chakra-ui/react"
-import {
-  Box,
-  HStack,
-  IconButton,
-  Input,
-  Stack,
-  mergeRefs,
-  useControllableState,
-} from "@chakra-ui/react"
-import { forwardRef, useRef } from "react"
+import * as React from "react"
 import { FiEye, FiEyeOff } from "react-icons/fi"
 import { Field } from "./field"
 import { InputGroup } from "./input-group"
+import { Input, type InputProps } from "./input"
+import { Button } from "./button"
+import { cn } from "../../utils"
 
 export interface PasswordVisibilityProps {
   defaultVisible?: boolean
@@ -28,44 +16,52 @@ export interface PasswordVisibilityProps {
 }
 
 export interface PasswordInputProps
-  extends InputProps,
+  extends Omit<InputProps, "type">,
     PasswordVisibilityProps {
-  rootProps?: GroupProps
   startElement?: React.ReactNode
   type: string
   errors: any
 }
 
-export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
+export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   function PasswordInput(props, ref) {
     const {
-      rootProps,
+      className,
       defaultVisible,
       visible: visibleProp,
       onVisibleChange,
-      visibilityIcon = { on: <FiEye />, off: <FiEyeOff /> },
+      visibilityIcon = { on: <FiEye className="h-4 w-4" />, off: <FiEyeOff className="h-4 w-4" /> },
       startElement,
       type,
       errors,
       ...rest
     } = props
 
-    const [visible, setVisible] = useControllableState({
-      value: visibleProp,
-      defaultValue: defaultVisible || false,
-      onChange: onVisibleChange,
-    })
+    const [visible, setVisible] = React.useState(defaultVisible || false)
+    
+    React.useEffect(() => {
+      if (visibleProp !== undefined) {
+        setVisible(visibleProp)
+      }
+    }, [visibleProp])
 
-    const inputRef = useRef<HTMLInputElement>(null)
+    React.useEffect(() => {
+      if (onVisibleChange) {
+        onVisibleChange(visible)
+      }
+    }, [visible, onVisibleChange])
+
+    const inputRef = React.useRef<HTMLInputElement>(null)
+    const combinedRef = useCombinedRefs(ref, inputRef)
 
     return (
       <Field
         invalid={!!errors[type]}
         errorText={errors[type]?.message}
-        alignSelf="start"
+        className="w-full"
       >
         <InputGroup
-          width="100%"
+          className="w-full"
           startElement={startElement}
           endElement={
             <VisibilityTrigger
@@ -80,11 +76,11 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
               {visible ? visibilityIcon.off : visibilityIcon.on}
             </VisibilityTrigger>
           }
-          {...rootProps}
         >
           <Input
+            className={className}
             {...rest}
-            ref={mergeRefs(ref, inputRef)}
+            ref={combinedRef}
             type={visible ? "text" : "password"}
           />
         </InputGroup>
@@ -92,71 +88,89 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     )
   },
 )
+PasswordInput.displayName = "PasswordInput"
 
-const VisibilityTrigger = forwardRef<HTMLButtonElement, ButtonProps>(
+interface VisibilityTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+
+const VisibilityTrigger = React.forwardRef<HTMLButtonElement, VisibilityTriggerProps>(
   function VisibilityTrigger(props, ref) {
     return (
-      <IconButton
+      <Button
+        type="button"
         tabIndex={-1}
         ref={ref}
-        me="-2"
-        aspectRatio="square"
-        size="sm"
         variant="ghost"
-        height="calc(100% - {spacing.2})"
+        size="icon"
+        className="h-8 w-8 rounded-full"
         aria-label="Toggle password visibility"
-        color="inherit"
         {...props}
       />
     )
-  },
+  }
 )
+VisibilityTrigger.displayName = "VisibilityTrigger"
 
-interface PasswordStrengthMeterProps extends StackProps {
+interface PasswordStrengthMeterProps extends React.HTMLAttributes<HTMLDivElement> {
   max?: number
   value: number
 }
 
-export const PasswordStrengthMeter = forwardRef<
+export const PasswordStrengthMeter = React.forwardRef<
   HTMLDivElement,
   PasswordStrengthMeterProps
->(function PasswordStrengthMeter(props, ref) {
-  const { max = 4, value, ...rest } = props
-
+>(function PasswordStrengthMeter({ className, max = 4, value, ...props }, ref) {
   const percent = (value / max) * 100
-  const { label, colorPalette } = getColorPalette(percent)
+  const { label, color } = getColorInfo(percent)
 
   return (
-    <Stack align="flex-end" gap="1" ref={ref} {...rest}>
-      <HStack width="full" ref={ref} {...rest}>
+    <div 
+      className={cn("flex flex-col gap-1 items-end", className)} 
+      ref={ref} 
+      {...props}
+    >
+      <div className="flex w-full gap-1">
         {Array.from({ length: max }).map((_, index) => (
-          <Box
+          <div
             key={index}
-            height="1"
-            flex="1"
-            rounded="sm"
-            data-selected={index < value ? "" : undefined}
-            layerStyle="fill.subtle"
-            colorPalette="gray"
-            _selected={{
-              colorPalette,
-              layerStyle: "fill.solid",
-            }}
+            className={cn(
+              "h-1 flex-1 rounded-sm bg-muted",
+              index < value && `bg-${color}`
+            )}
           />
         ))}
-      </HStack>
-      {label && <HStack textStyle="xs">{label}</HStack>}
-    </Stack>
+      </div>
+      {label && <div className="text-xs">{label}</div>}
+    </div>
   )
 })
+PasswordStrengthMeter.displayName = "PasswordStrengthMeter"
 
-function getColorPalette(percent: number) {
+function getColorInfo(percent: number) {
   switch (true) {
     case percent < 33:
-      return { label: "Low", colorPalette: "red" }
+      return { label: "Low", color: "destructive" }
     case percent < 66:
-      return { label: "Medium", colorPalette: "orange" }
+      return { label: "Medium", color: "orange-500" }
     default:
-      return { label: "High", colorPalette: "green" }
+      return { label: "High", color: "green-500" }
   }
+}
+
+// Helper function to combine refs
+function useCombinedRefs<T>(...refs: React.Ref<T>[]) {
+  const targetRef = React.useRef<T>(null)
+
+  React.useEffect(() => {
+    refs.forEach(ref => {
+      if (!ref) return
+
+      if (typeof ref === 'function') {
+        ref(targetRef.current)
+      } else {
+        (ref as React.MutableRefObject<T | null>).current = targetRef.current
+      }
+    })
+  }, [refs])
+
+  return targetRef
 }

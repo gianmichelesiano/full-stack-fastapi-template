@@ -1,18 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 
+import { useState } from "react"
+import { FaExchangeAlt } from "react-icons/fa"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 import {
-  Button,
   DialogActionTrigger,
   DialogRoot,
   DialogTrigger,
-  Flex,
-  Input,
-  Text,
-  VStack,
-} from "@chakra-ui/react"
-import { useState } from "react"
-import { FaExchangeAlt } from "react-icons/fa"
+} from "../ui/dialog"
 
 import { type UserPublic, type UserUpdate, UsersService } from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
@@ -79,10 +76,8 @@ const EditUser = ({ user }: EditUserProps) => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
@@ -96,8 +91,8 @@ const EditUser = ({ user }: EditUserProps) => {
             <DialogTitle>Edit User</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Update the user details below.</Text>
-            <VStack gap={4}>
+            <p className="mb-4">Update the user details below.</p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.email}
@@ -164,17 +159,17 @@ const EditUser = ({ user }: EditUserProps) => {
                   type="password"
                 />
               </Field>
-            </VStack>
+            </div>
 
-            <Flex mt={4} direction="column" gap={4}>
+            <div className="mt-4 flex flex-col space-y-4">
               <Controller
                 control={control}
                 name="is_superuser"
                 render={({ field }) => (
-                  <Field disabled={field.disabled} colorPalette="teal">
+                  <Field>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={({ checked }) => field.onChange(checked)}
+                      checked={field.value === true}
+                      onCheckedChange={(checked) => field.onChange(checked)}
                     >
                       Is superuser?
                     </Checkbox>
@@ -185,30 +180,29 @@ const EditUser = ({ user }: EditUserProps) => {
                 control={control}
                 name="is_active"
                 render={({ field }) => (
-                  <Field disabled={field.disabled} colorPalette="teal">
+                  <Field>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={({ checked }) => field.onChange(checked)}
+                      checked={field.value === true}
+                      onCheckedChange={(checked) => field.onChange(checked)}
                     >
                       Is active?
                     </Checkbox>
                   </Field>
                 )}
               />
-            </Flex>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
+          <DialogFooter className="space-x-2">
             <DialogActionTrigger asChild>
               <Button
-                variant="subtle"
-                colorPalette="gray"
+                variant="outline"
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
             </DialogActionTrigger>
-            <Button variant="solid" type="submit" loading={isSubmitting}>
+            <Button variant="default" type="submit" loading={isSubmitting}>
               Save
             </Button>
           </DialogFooter>

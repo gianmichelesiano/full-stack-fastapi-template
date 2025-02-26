@@ -1,33 +1,55 @@
-import { Field as ChakraField } from "@chakra-ui/react"
 import * as React from "react"
+import { cn } from "../../utils"
 
-export interface FieldProps extends Omit<ChakraField.RootProps, "label"> {
+export interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode
   helperText?: React.ReactNode
   errorText?: React.ReactNode
   optionalText?: React.ReactNode
+  invalid?: boolean
+  required?: boolean
 }
 
 export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
-  function Field(props, ref) {
-    const { label, children, helperText, errorText, optionalText, ...rest } =
-      props
+  function Field({ 
+    className, 
+    label, 
+    children, 
+    helperText, 
+    errorText, 
+    optionalText, 
+    invalid, 
+    required, 
+    ...props 
+  }, ref) {
     return (
-      <ChakraField.Root ref={ref} {...rest}>
+      <div 
+        ref={ref} 
+        className={cn("space-y-2", className)} 
+        {...props}
+      >
         {label && (
-          <ChakraField.Label>
-            {label}
-            <ChakraField.RequiredIndicator fallback={optionalText} />
-          </ChakraField.Label>
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+              {!required && optionalText && (
+                <span className="text-muted-foreground ml-1 text-xs">
+                  {optionalText}
+                </span>
+              )}
+            </label>
+          </div>
         )}
         {children}
-        {helperText && (
-          <ChakraField.HelperText>{helperText}</ChakraField.HelperText>
+        {helperText && !invalid && (
+          <p className="text-sm text-muted-foreground">{helperText}</p>
         )}
-        {errorText && (
-          <ChakraField.ErrorText>{errorText}</ChakraField.ErrorText>
+        {errorText && invalid && (
+          <p className="text-sm text-destructive">{errorText}</p>
         )}
-      </ChakraField.Root>
+      </div>
     )
-  },
+  }
 )
+Field.displayName = "Field"

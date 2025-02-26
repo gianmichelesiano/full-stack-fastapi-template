@@ -1,15 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
-
-import {
-  Button,
-  DialogActionTrigger,
-  DialogTitle,
-  Input,
-  Text,
-  Textarea,
-  VStack,
-} from "@chakra-ui/react"
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
 
@@ -17,16 +7,21 @@ import { type PostCreate, PostsService } from "@/client"
 import type { ApiError } from "@/client/core/ApiError"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
+import { Button } from "../ui/button"
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogRoot,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
 import { Field } from "../ui/field"
+import { Input } from "../ui/input"
+import { Textarea } from "../ui/textarea"
 
 const AddPost = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -68,14 +63,12 @@ const AddPost = () => {
 
   return (
     <DialogRoot
-      size={{ base: "xs", md: "md" }}
-      placement="center"
       open={isOpen}
-      onOpenChange={({ open }) => setIsOpen(open)}
+      onOpenChange={setIsOpen}
     >
       <DialogTrigger asChild>
-        <Button value="add-post" my={4}>
-          <FaPlus fontSize="16px" />
+        <Button value="add-post" className="my-4">
+          <FaPlus className="mr-2 h-4 w-4" />
           Add Post
         </Button>
       </DialogTrigger>
@@ -85,8 +78,8 @@ const AddPost = () => {
             <DialogTitle>Add Post</DialogTitle>
           </DialogHeader>
           <DialogBody>
-            <Text mb={4}>Fill in the details to add a new post.</Text>
-            <VStack gap={4}>
+            <p className="mb-4">Fill in the details to add a new post.</p>
+            <div className="flex flex-col space-y-4">
               <Field
                 required
                 invalid={!!errors.title}
@@ -117,21 +110,20 @@ const AddPost = () => {
                   rows={4}
                 />
               </Field>
-            </VStack>
+            </div>
           </DialogBody>
 
-          <DialogFooter gap={2}>
+          <DialogFooter className="space-x-2">
             <DialogActionTrigger asChild>
               <Button
-                variant="subtle"
-                colorPalette="gray"
+                variant="outline"
                 disabled={isSubmitting}
               >
                 Cancel
               </Button>
             </DialogActionTrigger>
             <Button
-              variant="solid"
+              variant="default"
               type="submit"
               disabled={!isValid}
               loading={isSubmitting}
