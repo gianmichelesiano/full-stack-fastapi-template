@@ -6,7 +6,7 @@ import { Toaster } from "./toaster"
 
 export function CustomProvider(props: PropsWithChildren) {
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="system">
       {props.children}
       <Toaster />
     </ThemeProvider>

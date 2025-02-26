@@ -1,4 +1,4 @@
-import { useTheme } from "next-themes"
+import { useTheme } from "../../theme"
 
 import { Radio, RadioGroup } from "@/components/ui/radio"
 
@@ -12,7 +12,7 @@ const Appearance = () => {
       </h2>
 
       <RadioGroup
-        onValueChange={(value) => setTheme(value)}
+        onValueChange={(value) => setTheme(value as "dark" | "light" | "system")}
         value={theme}
       >
         <div className="flex flex-col space-y-2">

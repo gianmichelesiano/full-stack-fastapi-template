@@ -1,4 +1,4 @@
-import * as Tabs from "@radix-ui/react-tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createFileRoute } from "@tanstack/react-router"
 
 import Appearance from "@/components/UserSettings/Appearance"
@@ -23,31 +23,31 @@ function UserSettings() {
   const finalTabs = currentUser?.is_superuser
     ? tabsConfig.slice(0, 3)
     : tabsConfig
-
+  
   if (!currentUser) {
     return null
   }
-
+  
   return (
     <div className="w-full">
       <h1 className="text-xl font-bold text-center md:text-left py-12">
         User Settings
       </h1>
-
-      <Tabs.Root defaultValue="my-profile" className="w-full">
-        <Tabs.List>
+      
+      <Tabs defaultValue="my-profile" className="w-full">
+        <TabsList className="grid grid-cols-4 w-full mb-8">
           {finalTabs.map((tab) => (
-            <Tabs.Trigger key={tab.value} value={tab.value}>
+            <TabsTrigger key={tab.value} value={tab.value} className="px-4 py-2">
               {tab.title}
-            </Tabs.Trigger>
+            </TabsTrigger>
           ))}
-        </Tabs.List>
+        </TabsList>
         {finalTabs.map((tab) => (
-          <Tabs.Content key={tab.value} value={tab.value}>
+          <TabsContent key={tab.value} value={tab.value} className="p-4">
             <tab.component />
-          </Tabs.Content>
+          </TabsContent>
         ))}
-      </Tabs.Root>
+      </Tabs>
     </div>
   )
 }
